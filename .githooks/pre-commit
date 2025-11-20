@@ -2,13 +2,7 @@
 set -euo pipefail
 
 # rustfmt で整形チェック
-(
-  cd src-tauri
-  cargo fmt --all -- --check
-)
+cargo fmt --manifest-path src-tauri/Cargo.toml --all -- --check
 
 # clippy で静的解析（警告をエラー扱い）
-(
-  cd src-tauri
-  cargo clippy --all-targets --all-features -- -D warnings
-)
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --all-features -- -D warnings
