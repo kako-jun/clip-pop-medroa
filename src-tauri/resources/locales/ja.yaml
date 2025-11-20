@@ -1,0 +1,22 @@
+copied: コピーしました！
+cleared: 消去しました。
+settings: 設定
+quit: 終了
+themeLabel: テーマ
+themeDark: ダーク
+themeLight: ライト
+themeCustom: カスタム画像
+displayTime: 表示時間（秒）
+cornerLabel: 表示位置
+cornerBottomRight: 右下
+cornerBottomLeft: 左下
+cornerTopRight: 右上
+cornerTopLeft: 左上
+customImagesLabel: カスタム画像
+copyImage: コピー時の画像
+clearImage: 消去時の画像
+previewLabel: プレビュー
+restartNotice: 設定は config.yaml に保存され、再起動後に反映されます。
+menuSettings: 設定
+menuQuit: 終了
+hoverHint: ホバー中は非表示になりません。

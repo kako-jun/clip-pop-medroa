@@ -1,0 +1,6 @@
+theme: dark
+display_time: 3
+corner: bottom_right
+custom_images:
+  copy: ""
+  clear: ""

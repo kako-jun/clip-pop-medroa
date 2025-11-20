@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devPath": "../src",
+    "distDir": "../src",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "Clip Pop Medroa",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "macOSPrivateApi": true,
+    "bundle": {
+      "active": false,
+      "identifier": "app.clip.pop.medroa",
+      "resources": [
+        "resources/locales"
+      ]
+    },
+    "windows": [
+      {
+        "title": "Clip Pop Medroa",
+        "width": 420,
+        "height": 260,
+        "decorations": false,
+        "transparent": true,
+        "resizable": false,
+        "fullscreen": false,
+        "visible": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}

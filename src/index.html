@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clip Pop Medroa</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="notification" class="notification hidden corner-bottom-right" aria-live="polite">
+      <div class="notification-surface">
+        <div class="notification-content">
+          <div id="icon" class="icon" data-icon="copy" aria-hidden="true"></div>
+          <div id="message" class="message">Copy</div>
+          <img id="custom-image" class="custom-image hidden" alt="Custom notification" />
+        </div>
+        <button id="menu-button" class="menu-button" aria-haspopup="true" aria-expanded="false">︙</button>
+        <div id="menu" class="menu hidden">
+          <button id="open-settings" class="menu-item">
+            <span class="icon" data-icon="settings" aria-hidden="true"></span>
+            <span data-locale-key="settings">Settings</span>
+          </button>
+          <button id="quit-app" class="menu-item">
+            <span class="icon" data-icon="power" aria-hidden="true"></span>
+            <span data-locale-key="quit">Quit</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section id="settings-panel" class="settings hidden">
+      <header>
+        <div class="title">Clip Pop Medroa</div>
+        <button id="close-settings" class="close">×</button>
+      </header>
+      <div class="settings-body">
+        <div class="field-group">
+          <label class="field-label" data-locale-key="themeLabel">Theme</label>
+          <div class="choices" id="theme-choices">
+            <label><input type="radio" name="theme" value="dark" /> <span data-locale-key="themeDark">Dark</span></label>
+            <label><input type="radio" name="theme" value="light" /> <span data-locale-key="themeLight">Light</span></label>
+            <label><input type="radio" name="theme" value="custom" /> <span data-locale-key="themeCustom">Custom images</span></label>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="display-seconds" data-locale-key="displayTime">Display time (seconds)</label>
+          <input id="display-seconds" type="range" min="1" max="10" value="3" />
+          <div class="range-value"><span id="seconds-preview">3</span>s</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" data-locale-key="cornerLabel">Corner</label>
+          <select id="corner-select">
+            <option value="bottom_right" data-locale-key="cornerBottomRight">Bottom right</option>
+            <option value="bottom_left" data-locale-key="cornerBottomLeft">Bottom left</option>
+            <option value="top_right" data-locale-key="cornerTopRight">Top right</option>
+            <option value="top_left" data-locale-key="cornerTopLeft">Top left</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" data-locale-key="customImagesLabel">Custom images</label>
+          <div class="custom-image-picker">
+            <button id="pick-copy" type="button">
+              <span class="icon" data-icon="copy" aria-hidden="true"></span>
+              <span data-locale-key="copyImage">Copy image</span>
+            </button>
+            <span id="copy-path" class="path"></span>
+          </div>
+          <div class="custom-image-picker">
+            <button id="pick-clear" type="button">
+              <span class="icon" data-icon="clear" aria-hidden="true"></span>
+              <span data-locale-key="clearImage">Clear image</span>
+            </button>
+            <span id="clear-path" class="path"></span>
+          </div>
+        </div>
+
+        <div class="preview-block">
+          <div class="preview-label" data-locale-key="previewLabel">Preview</div>
+          <div id="preview" class="notification preview corner-bottom-right">
+            <div class="notification-surface">
+              <div class="notification-content">
+                <div class="icon" data-icon="copy" aria-hidden="true"></div>
+                <div class="message" data-locale-key="copied">Copied!</div>
+                <img class="custom-image hidden" alt="" />
+              </div>
+            </div>
+          </div>
+          <p class="note" data-locale-key="restartNotice">Changes are written to config.yaml and applied after restarting the app.</p>
+        </div>
+      </div>
+    </section>
+
+    <script src="main.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "clip-pop-medroa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "tauri:dev": "cd src-tauri && cargo tauri dev",
+    "tauri:build": "cd src-tauri && cargo tauri build",
+    "fmt": "npm run fmt:rust",
+    "fmt:rust": "cd src-tauri && cargo fmt",
+    "lint": "npm run lint:rust",
+    "lint:rust": "cd src-tauri && cargo fmt -- --check"
+  },
+  "devDependencies": {}
+}

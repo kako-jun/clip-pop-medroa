@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# rustfmt で整形チェック
+cargo fmt --all -- --check
+
+# clippy で静的解析（警告をエラー扱い）
+cargo clippy --all-targets --all-features -- -D warnings

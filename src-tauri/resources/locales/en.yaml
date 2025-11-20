@@ -1,0 +1,22 @@
+copied: Copied to clipboard!
+cleared: Clipboard cleared.
+settings: Settings
+quit: Quit
+themeLabel: Theme
+themeDark: Dark
+themeLight: Light
+themeCustom: Custom images
+displayTime: Display time (seconds)
+cornerLabel: Corner
+cornerBottomRight: Bottom right
+cornerBottomLeft: Bottom left
+cornerTopRight: Top right
+cornerTopLeft: Top left
+customImagesLabel: Custom images
+copyImage: Copy image
+clearImage: Clear image
+previewLabel: Preview
+restartNotice: Changes are written to config.yaml and applied after restarting the app.
+menuSettings: Settings
+menuQuit: Quit
+hoverHint: Hold the pointer here to keep the popup visible.
