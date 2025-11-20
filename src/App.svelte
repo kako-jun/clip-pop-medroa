@@ -146,6 +146,10 @@
     });
   }
 
+  $: if (editorContainer && !editorView) {
+    initializeEditor();
+  }
+
   $: if (editorView && currentNote) {
     const doc = editorView.state.doc.toString();
     if (doc !== currentNote.content) {
