@@ -5,7 +5,7 @@ use std::{collections::HashMap, env, fs, path::PathBuf};
 use arboard::Clipboard;
 use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
-use tauri::{AppHandle, State};
+use tauri::{AppHandle, Manager, State};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -189,10 +189,8 @@ fn load_locale(locale: String, app: AppHandle) -> Result<HashMap<String, String>
             }
         }
 
-        if let Some(path) = app
-            .path_resolver()
-            .resolve_resource(format!("resources/locales/{candidate}.yaml"))
-        {
+        if let Ok(resource_dir) = app.path().resource_dir() {
+            let path = resource_dir.join("locales").join(format!("{candidate}.yaml"));
             if path.exists() {
                 return read_locale_from_path(path).map_err(|e| e.to_string());
             }
