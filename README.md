@@ -1,73 +1,73 @@
-# Clip Pop Medroa (Tauri)
+# Clip Pop Medroa
 
-Clip Pop Medroa is a lightweight always-on-top clipboard overlay built with [Tauri](https://tauri.app/). It watches for clipboard updates, shows playful copy/clear banners, and lets users preconfigure the experience through a YAML file that lives in the operating system's standard settings directory.
+Clip Pop Medroaは[Tauri](https://tauri.app/)で構築された軽量な常時最前面クリップボードオーバーレイです。クリップボードの更新を監視し、コピー/クリアのバナーを表示します。YAMLファイルによる設定が可能です。
 
-## Features
+## 機能
 
-- **Tauri overlay window** – frameless, transparent, and always on top so the toast never hides behind apps.
-- **Copy / clear banners** – default dark or light translucent bars with localized "Copied" / "Cleared" strings and font icons.
-- **Custom PNG/WebP support** – switch the theme to `custom` and point to per-event artwork (including animated transparent WebP) so the popup can become any character.
-- **Hover-aware fade out** – popups fade away after the configured number of seconds and pause while hovered so the inline menu can be used.
-- **︙ menu** – open the settings surface with a live preview or quit the resident process.
-- **OS-native config file** – the app loads `config.yaml` once at startup from the platform's recommended path:
-  - Linux/BSD: `$XDG_CONFIG_HOME/ClipPopMedroa/config.yaml` (falls back to `~/.config/...`)
+- **Tauriオーバーレイウィンドウ** - フレームレス、透明、常に最前面でトーストが他のアプリの後ろに隠れません
+- **コピー/クリアバナー** - ローカライズされた「コピーしました」/「クリアしました」の文字列とフォントアイコン付きのダーク/ライトの半透明バー
+- **カスタムPNG/WebPサポート** - テーマを`custom`に切り替えてイベントごとのアートワーク（アニメーション透過WebPを含む）を指定可能
+- **ホバー対応フェードアウト** - 設定した秒数後にポップアップがフェードアウトし、ホバー中は一時停止してインラインメニューが使用可能
+- **︙メニュー** - ライブプレビュー付きの設定画面を開くか、常駐プロセスを終了
+- **OSネイティブ設定ファイル** - 起動時にプラットフォーム推奨のパスから`config.yaml`を読み込み:
+  - Linux/BSD: `$XDG_CONFIG_HOME/ClipPopMedroa/config.yaml`（`~/.config/...`にフォールバック）
   - macOS: `~/Library/Application Support/ClipPopMedroa/config.yaml`
   - Windows: `%APPDATA%\ClipPopMedroa\config.yaml`
-- **YAML settings** – pick theme (`dark`, `light`, or `custom`), popup lifetime, corner, and custom image paths. Settings UI writes the file immediately; changes apply on the next launch per the original spec.
-- **Locale dictionaries** – YAML dictionaries live under `config/locales` (user-provided) or the bundled `locales` folder. Missing keys fall back to English.
+- **YAML設定** - テーマ（`dark`、`light`、`custom`）、ポップアップ表示時間、表示位置、カスタム画像パスを設定可能
+- **ロケール辞書** - YAML辞書は`config/locales`（ユーザー提供）または同梱の`locales`フォルダに配置。不足キーは英語にフォールバック
 
-## Repository layout
+## リポジトリ構成
 
 ```
-config.example.yaml    # sample config values
-src/                   # front-end HTML/CSS/JS for the overlay + settings
+config.example.yaml    # 設定値のサンプル
+src/                   # オーバーレイ+設定用のフロントエンドHTML/CSS/JS
 src-tauri/
-  ├─ src/main.rs       # Tauri bootstrap + commands (config, locales, clipboard polling)
-  ├─ resources/locales # built-in en/ja dictionaries shipped with the binary
-  └─ tauri.conf.json   # window + bundler configuration
+  ├─ src/main.rs       # Tauriブートストラップ+コマンド（設定、ロケール、クリップボードポーリング）
+  ├─ resources/locales # バイナリに同梱されるen/ja辞書
+  └─ tauri.conf.json   # ウィンドウ+バンドラー設定
 ```
 
-## Running the app
+## アプリの実行
 
-1. Install Rust (stable) and the Tauri system dependencies for your platform.
-2. Build the Tauri shell:
+1. Rust（stable）とプラットフォーム用のTauriシステム依存関係をインストール
+2. Tauriシェルをビルド:
    ```bash
- cd src-tauri
-  cargo tauri dev
-  ```
-  Because the front-end uses plain HTML/CSS/JS (no bundler), the dev server simply loads `../src`.
-3. Place a `config.yaml` in the OS-specific directory if you want to override the defaults. The included `config.example.yaml` is a good starting point.
+   cd src-tauri
+   cargo tauri dev
+   ```
+   フロントエンドはプレーンHTML/CSS/JS（バンドラーなし）のため、devサーバーは単に`../src`を読み込みます
+3. デフォルトを上書きしたい場合は、OS固有のディレクトリに`config.yaml`を配置。同梱の`config.example.yaml`が参考になります
 
-## Development automation
+## 開発の自動化
 
-- **Rust-only Git hooks** – run `./scripts/install-hooks.sh` once to point `core.hooksPath` at `.githooks`. The pre-commit hook runs `cargo fmt -- --check` and `cargo clippy --all-targets --all-features -- -D warnings` so commits stay clean without Node-based Husky.
-- **CI linting** – `.github/workflows/ci.yml` runs the same `cargo fmt` + `cargo clippy` checks on pushes to `main`/`master` and on pull requests.
-- **Tagged releases** – pushing a tag matching `v*` (or using `workflow_dispatch`) triggers `.github/workflows/release.yml`, which builds and attaches Tauri bundles to the GitHub release page. The workflow relies on the Rust toolchain and the static assets under `src/` (no JS tooling is required to bundle).
+- **Rust専用Gitフック** - `./scripts/install-hooks.sh`を一度実行して`core.hooksPath`を`.githooks`に向けます。pre-commitフックは`cargo fmt -- --check`と`cargo clippy --all-targets --all-features -- -D warnings`を実行し、Node.jsベースのHuskyなしでコミットをクリーンに保ちます
+- **CIリント** - `.github/workflows/ci.yml`は`main`/`master`へのプッシュとプルリクエストで同じ`cargo fmt` + `cargo clippy`チェックを実行
+- **タグ付きリリース** - `v*`にマッチするタグをプッシュ（または`workflow_dispatch`を使用）すると`.github/workflows/release.yml`がトリガーされ、TauriバンドルをGitHubリリースページに添付
 
-## Configuration reference
+## 設定リファレンス
 
 ```yaml
-theme: dark        # dark / light / custom
-display_time: 3    # seconds (1-10 recommended)
+theme: dark           # dark / light / custom
+display_time: 3       # 秒（1-10推奨）
 corner: bottom_right  # top_left / top_right / bottom_left / bottom_right
 custom_images:
-  copy: ""        # absolute file path (PNG/WebP). Empty -> nothing is rendered
+  copy: ""            # 絶対ファイルパス（PNG/WebP）。空 -> 何も表示されない
   clear: ""
 ```
 
-## Locale dictionaries
+## ロケール辞書
 
-Locale YAML files contain flat key/value pairs:
+ロケールYAMLファイルはフラットなキー/値ペアを含みます:
 
 ```yaml
-copied: Copied to clipboard!
-cleared: Clipboard cleared.
-settings: Settings
+copied: クリップボードにコピーしました！
+cleared: クリップボードをクリアしました。
+settings: 設定
 ...
 ```
 
-User dictionaries can be dropped in the config directory under `locales/<lang>.yaml`. The app tries `navigator.language`, falls back to English, and exposes the messages to the UI.
+ユーザー辞書は設定ディレクトリの`locales/<lang>.yaml`に配置できます。アプリは`navigator.language`を試し、英語にフォールバックし、UIにメッセージを表示します。
 
-## Screenshots / preview
+## スクリーンショット / プレビュー
 
-The settings panel includes a live preview showing the currently selected corner, theme, and timing so you can fine-tune the look without waiting for an actual clipboard event.
+設定パネルには、現在選択されているコーナー、テーマ、タイミングを表示するライブプレビューが含まれており、実際のクリップボードイベントを待たずに見た目を微調整できます。

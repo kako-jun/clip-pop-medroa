@@ -16,49 +16,30 @@ enum AppError {
     Other(String),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 enum Theme {
+    #[default]
     Dark,
     Light,
     Custom,
 }
 
-impl Default for Theme {
-    fn default() -> Self {
-        Theme::Dark
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 enum Corner {
+    #[default]
     BottomRight,
     BottomLeft,
     TopRight,
     TopLeft,
 }
 
-impl Default for Corner {
-    fn default() -> Self {
-        Corner::BottomRight
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default)]
 struct CustomImages {
     copy: Option<String>,
     clear: Option<String>,
-}
-
-impl Default for CustomImages {
-    fn default() -> Self {
-        Self {
-            copy: None,
-            clear: None,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -150,7 +131,7 @@ fn sanitize_config(mut cfg: AppConfig) -> AppConfig {
 
 fn locale_candidates(raw: &str) -> Vec<String> {
     let lowered = raw.to_lowercase();
-    let mut parts: Vec<&str> = lowered.split(|c| c == '-' || c == '_').collect();
+    let mut parts: Vec<&str> = lowered.split(['-', '_']).collect();
     let mut result = Vec::new();
     while !parts.is_empty() {
         result.push(parts.join("_"));
@@ -230,6 +211,20 @@ fn exit_app(app: AppHandle) {
     app.exit(0);
 }
 
+fn main() {
+    tauri::Builder::default()
+        .manage(ClipboardState(Mutex::new(None)))
+        .invoke_handler(tauri::generate_handler![
+            exit_app,
+            load_config,
+            load_locale,
+            poll_clipboard,
+            save_config
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running Clip Pop Medroa");
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -245,16 +240,24 @@ mod tests {
 
     #[test]
     fn sanitize_config_clamps_display_time() {
-        let mut cfg = AppConfig::default();
-        cfg.display_time = 0;
-        let sanitized = sanitize_config(cfg.clone());
+        let cfg = AppConfig {
+            display_time: 0,
+            ..Default::default()
+        };
+        let sanitized = sanitize_config(cfg);
         assert_eq!(sanitized.display_time, 3);
 
-        cfg.display_time = 120;
-        let sanitized = sanitize_config(cfg.clone());
+        let cfg = AppConfig {
+            display_time: 120,
+            ..Default::default()
+        };
+        let sanitized = sanitize_config(cfg);
         assert_eq!(sanitized.display_time, 60);
 
-        cfg.display_time = 10;
+        let cfg = AppConfig {
+            display_time: 10,
+            ..Default::default()
+        };
         let sanitized = sanitize_config(cfg);
         assert_eq!(sanitized.display_time, 10);
     }
@@ -284,11 +287,15 @@ mod tests {
     #[test]
     fn write_config_sanitizes_and_persists() {
         with_temp_config_dir(|dir| {
-            let mut cfg = AppConfig::default();
-            cfg.display_time = 99;
-            cfg.theme = Theme::Custom;
-            cfg.corner = Corner::TopLeft;
-            cfg.custom_images.copy = Some("/tmp/copy.png".into());
+            let cfg = AppConfig {
+                display_time: 99,
+                theme: Theme::Custom,
+                corner: Corner::TopLeft,
+                custom_images: CustomImages {
+                    copy: Some("/tmp/copy.png".into()),
+                    ..Default::default()
+                },
+            };
 
             write_config(&cfg).expect("write should work");
 
@@ -304,18 +311,4 @@ mod tests {
             );
         });
     }
-}
-
-fn main() {
-    tauri::Builder::default()
-        .manage(ClipboardState(Mutex::new(None)))
-        .invoke_handler(tauri::generate_handler![
-            exit_app,
-            load_config,
-            load_locale,
-            poll_clipboard,
-            save_config
-        ])
-        .run(tauri::generate_context!())
-        .expect("error while running Clip Pop Medroa");
 }

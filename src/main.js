@@ -1,6 +1,5 @@
-const tauri = window.__TAURI__?.tauri;
+const tauri = window.__TAURI__?.core;
 const dialog = window.__TAURI__?.dialog;
-const processApi = window.__TAURI__?.process;
 
 const notification = document.getElementById("notification");
 const messageEl = document.getElementById("message");
@@ -74,8 +73,8 @@ function updateCorner(element, corner) {
   element.classList.add(`corner-${corner.replace("_", "-")}`);
 }
 
-function convertFileSrc(path) {
-  return tauri?.convertFileSrc ? tauri.convertFileSrc(path) : path;
+function convertFileSrc(filePath) {
+  return tauri?.convertFileSrc ? tauri.convertFileSrc(filePath) : filePath;
 }
 
 function setIconKind(iconNode, kind) {
@@ -292,7 +291,7 @@ function initMenu() {
 
   quitBtn.addEventListener("click", () => {
     toggleMenu(false);
-    processApi?.exit?.(0);
+    tauri?.invoke("exit_app");
   });
 }
 
