@@ -214,6 +214,22 @@ fn exit_app(app: AppHandle) {
 fn main() {
     tauri::Builder::default()
         .manage(ClipboardState(Mutex::new(None)))
+        .setup(|app| {
+            let window = app.get_webview_window("main").expect("failed to get main window");
+
+            // Position window in bottom-right corner
+            if let Some(monitor) = window.current_monitor()? {
+                let screen_size = monitor.size();
+                let window_size = window.outer_size()?;
+
+                let x = screen_size.width as i32 - window_size.width as i32 - 32;
+                let y = screen_size.height as i32 - window_size.height as i32 - 32;
+
+                window.set_position(tauri::Position::Physical(tauri::PhysicalPosition { x, y }))?;
+            }
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             exit_app,
             load_config,

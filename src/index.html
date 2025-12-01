@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clip Pop Medroa</title>
     <link rel="stylesheet" href="styles.css" />
+    <script type="module">
+      import { invoke } from 'https://esm.sh/@tauri-apps/api@2/core';
+      import { convertFileSrc } from 'https://esm.sh/@tauri-apps/api@2/core';
+      import { open } from 'https://esm.sh/@tauri-apps/plugin-dialog@2';
+      import { getCurrentWindow } from 'https://esm.sh/@tauri-apps/api@2/window';
+      window.__TAURI__ = {
+        core: { invoke, convertFileSrc },
+        dialog: { open },
+        window: { getCurrentWindow }
+      };
+    </script>
   </head>
   <body>
     <div id="notification" class="notification hidden corner-bottom-right" aria-live="polite">

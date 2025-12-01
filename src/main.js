@@ -74,7 +74,7 @@ function updateCorner(element, corner) {
 }
 
 function convertFileSrc(filePath) {
-  return tauri?.convertFileSrc ? tauri.convertFileSrc(filePath) : filePath;
+  return tauri?.core?.convertFileSrc ? tauri.core.convertFileSrc(filePath) : filePath;
 }
 
 function setIconKind(iconNode, kind) {
@@ -175,12 +175,22 @@ function startPolling() {
   state.pollTimer = setInterval(pollClipboard, 900);
 }
 
-function closeSettings() {
+async function closeSettings() {
   settingsPanel.classList.add("hidden");
+  // Restore small window size for notification
+  if (window.__TAURI__?.window?.getCurrentWindow) {
+    const appWindow = window.__TAURI__.window.getCurrentWindow();
+    await appWindow.setSize({ width: 420, height: 260 });
+  }
 }
 
-function openSettings() {
+async function openSettings() {
   settingsPanel.classList.remove("hidden");
+  // Expand window size for settings panel
+  if (window.__TAURI__?.window?.getCurrentWindow) {
+    const appWindow = window.__TAURI__.window.getCurrentWindow();
+    await appWindow.setSize({ width: 420, height: 600 });
+  }
 }
 
 function updatePreviewText() {
