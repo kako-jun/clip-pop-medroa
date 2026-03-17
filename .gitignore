@@ -7,3 +7,9 @@ node_modules
 .claude/settings.local.json
 .serena/
 .mcp.json
+
+# Security & build
+.env
+config.yaml
+*.sqlite
+build/
