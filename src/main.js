@@ -30,6 +30,7 @@ const state = {
   messages: {},
   hideTimer: null,
   pollTimer: null,
+  saveTimer: null,
   hoverLock: false,
 };
 
@@ -74,7 +75,7 @@ function updateCorner(element, corner) {
 }
 
 function convertFileSrc(filePath) {
-  return tauri?.core?.convertFileSrc ? tauri.core.convertFileSrc(filePath) : filePath;
+  return tauri?.convertFileSrc ? tauri.convertFileSrc(filePath) : filePath;
 }
 
 function setIconKind(iconNode, kind) {
@@ -179,8 +180,9 @@ async function closeSettings() {
   settingsPanel.classList.add("hidden");
   // Restore small window size for notification
   if (window.__TAURI__?.window?.getCurrentWindow) {
-    const appWindow = window.__TAURI__.window.getCurrentWindow();
-    await appWindow.setSize({ width: 420, height: 260 });
+    const { getCurrentWindow, LogicalSize } = window.__TAURI__.window;
+    const appWindow = getCurrentWindow();
+    await appWindow.setSize(new LogicalSize(420, 260));
   }
 }
 
@@ -188,8 +190,9 @@ async function openSettings() {
   settingsPanel.classList.remove("hidden");
   // Expand window size for settings panel
   if (window.__TAURI__?.window?.getCurrentWindow) {
-    const appWindow = window.__TAURI__.window.getCurrentWindow();
-    await appWindow.setSize({ width: 420, height: 600 });
+    const { getCurrentWindow, LogicalSize } = window.__TAURI__.window;
+    const appWindow = getCurrentWindow();
+    await appWindow.setSize(new LogicalSize(420, 600));
   }
 }
 
@@ -217,10 +220,15 @@ function persistConfig() {
   if (!tauri || !state.pendingConfig) return;
   const normalized = normalizeConfig(state.pendingConfig);
   state.pendingConfig = normalized;
-  tauri.invoke("save_config", { config: normalized }).catch((error) => {
-    console.error("Failed to save config", error);
-  });
   updatePreviewText();
+  if (state.saveTimer) {
+    clearTimeout(state.saveTimer);
+  }
+  state.saveTimer = setTimeout(() => {
+    tauri.invoke("save_config", { config: state.pendingConfig }).catch((error) => {
+      console.error("Failed to save config", error);
+    });
+  }, 400);
 }
 
 function cloneConfig(config) {

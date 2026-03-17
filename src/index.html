@@ -11,10 +11,11 @@
       import { convertFileSrc } from 'https://esm.sh/@tauri-apps/api@2/core';
       import { open } from 'https://esm.sh/@tauri-apps/plugin-dialog@2';
       import { getCurrentWindow } from 'https://esm.sh/@tauri-apps/api@2/window';
+      import { LogicalSize } from 'https://esm.sh/@tauri-apps/api@2/window';
       window.__TAURI__ = {
         core: { invoke, convertFileSrc },
         dialog: { open },
-        window: { getCurrentWindow }
+        window: { getCurrentWindow, LogicalSize }
       };
     </script>
   </head>
