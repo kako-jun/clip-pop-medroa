@@ -1,5 +1,9 @@
 const tauri = window.__TAURI__?.core;
-const dialog = window.__TAURI__?.dialog;
+// Dialog open() via Tauri plugin invoke (no CDN/npm import needed)
+const dialog = {
+  open: (options = {}) =>
+    tauri?.invoke("plugin:dialog|open", { options }),
+};
 
 const notification = document.getElementById("notification");
 const messageEl = document.getElementById("message");

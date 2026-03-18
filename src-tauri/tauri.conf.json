@@ -7,12 +7,13 @@
     "frontendDist": "../src"
   },
   "bundle": {
-    "active": false,
+    "active": true,
     "resources": {
       "resources/locales": "."
     }
   },
   "app": {
+    "withGlobalTauri": true,
     "macOSPrivateApi": true,
     "security": {
       "csp": null

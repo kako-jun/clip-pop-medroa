@@ -103,7 +103,7 @@ fn read_config() -> Result<AppConfig, AppError> {
         return Ok(default);
     }
     let contents = fs::read_to_string(&path).map_err(|e| AppError::Other(e.to_string()))?;
-    let cfg: AppConfig = serde_yaml::from_str(&contents)
+    let cfg: AppConfig = serde_yml::from_str(&contents)
         .map_err(|e| AppError::Other(format!("failed to parse config: {e}")))?;
     Ok(sanitize_config(cfg))
 }
@@ -113,7 +113,7 @@ fn write_config(cfg: &AppConfig) -> Result<(), AppError> {
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|e| AppError::Other(e.to_string()))?;
     }
-    let contents = serde_yaml::to_string(&sanitize_config(cfg.clone()))
+    let contents = serde_yml::to_string(&sanitize_config(cfg.clone()))
         .map_err(|e| AppError::Other(e.to_string()))?;
     fs::write(&path, contents).map_err(|e| AppError::Other(e.to_string()))?;
     Ok(())
@@ -145,7 +145,7 @@ fn locale_candidates(raw: &str) -> Vec<String> {
 
 fn read_locale_from_path(path: PathBuf) -> Result<HashMap<String, String>, AppError> {
     let contents = fs::read_to_string(&path).map_err(|e| AppError::Other(e.to_string()))?;
-    let data: HashMap<String, String> = serde_yaml::from_str(&contents)
+    let data: HashMap<String, String> = serde_yml::from_str(&contents)
         .map_err(|e| AppError::Other(format!("failed to parse locale: {e}")))?;
     Ok(data)
 }
@@ -213,6 +213,7 @@ fn exit_app(app: AppHandle) {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .manage(ClipboardState(Mutex::new(None)))
         .setup(|app| {
             let window = app.get_webview_window("main").expect("failed to get main window");
@@ -295,7 +296,7 @@ mod tests {
 
             let path = dir.join("config.yaml");
             let contents = fs::read_to_string(path).expect("config file should exist");
-            let persisted: AppConfig = serde_yaml::from_str(&contents).expect("yaml should parse");
+            let persisted: AppConfig = serde_yml::from_str(&contents).expect("yaml should parse");
             assert_eq!(persisted.display_time, 3);
         });
     }
@@ -317,7 +318,7 @@ mod tests {
 
             let contents =
                 fs::read_to_string(dir.join("config.yaml")).expect("config should exist");
-            let persisted: AppConfig = serde_yaml::from_str(&contents).expect("yaml should parse");
+            let persisted: AppConfig = serde_yml::from_str(&contents).expect("yaml should parse");
             assert_eq!(persisted.display_time, 60, "display_time should be clamped");
             assert!(matches!(persisted.theme, Theme::Custom));
             assert!(matches!(persisted.corner, Corner::TopLeft));
