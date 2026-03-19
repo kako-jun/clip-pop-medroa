@@ -47,6 +47,12 @@ cargo clippy               # Rustコードをリント (src-tauri/から)
 - **ポーリングベースのクリップボード** - クロスプラットフォーム互換性のためネイティブフックではなくインターバルポーリングを使用
 - **常に最前面の透明ウィンドウ** - 常に表示されるフレームレスオーバーレイ
 
+## CI/CD
+
+- **CI**: `.github/workflows/ci.yml` — push/PR to main triggers `cargo fmt --check` / `cargo clippy` / `cargo check` + `prettier --check`
+- **Release**: `.github/workflows/release.yml` — manual dispatch or tag `v*`, 3-OS matrix (macOS/Linux/Windows), tauri-action
+- **Pre-commit**: Husky + lint-staged (`prettier` for JS/HTML/CSS/JSON) + `cargo fmt`
+
 ## テストに関する注意
 
 - Rustユニットテストは`tempfile`を使用して設定テストを分離

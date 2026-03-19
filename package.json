@@ -6,13 +6,26 @@
   "scripts": {
     "tauri:dev": "cd src-tauri && cargo tauri dev",
     "tauri:build": "cd src-tauri && cargo tauri build",
-    "fmt": "npm run fmt:rust",
+    "fmt": "npm run fmt:rust && npm run fmt:frontend",
     "fmt:rust": "cd src-tauri && cargo fmt",
-    "lint": "npm run lint:rust",
-    "lint:rust": "cd src-tauri && cargo fmt -- --check"
+    "fmt:frontend": "prettier --write \"src/**/*.{js,html,css,json}\"",
+    "lint": "npm run lint:rust && npm run lint:frontend",
+    "lint:rust": "cd src-tauri && cargo fmt -- --check",
+    "lint:frontend": "prettier --check \"src/**/*.{js,html,css,json}\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/plugin-dialog": "^2.6.0"
+  },
+  "devDependencies": {
+    "husky": "^9",
+    "lint-staged": "^15",
+    "prettier": "^3"
+  },
+  "lint-staged": {
+    "*.{js,html,css,json}": [
+      "prettier --write"
+    ]
   }
 }

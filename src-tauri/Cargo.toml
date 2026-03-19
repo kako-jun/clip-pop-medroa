@@ -4,14 +4,14 @@ version = "0.1.0"
 edition = "2021"
 
 [build-dependencies]
-tauri-build = { version = "2", features = [] }
+tauri-build = { version = "2.5", features = [] }
 
 [dependencies]
 arboard = "3.3"
 dirs-next = "2.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_yml = "0.0.12"
-tauri = { version = "2", features = ["macos-private-api"] }
+tauri = { version = "2.10", features = ["macos-private-api"] }
 tauri-plugin-dialog = "2"
 thiserror = "1.0"
 parking_lot = "0.12"
