@@ -1,10 +1,17 @@
 name: Build and Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v1.0.0)'
+        required: false
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -41,6 +48,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Add Rust targets (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          rustup target add aarch64-apple-darwin
+          rustup target add x86_64-apple-darwin
+
       - name: Install npm dependencies
         run: npm ci
 
@@ -49,7 +62,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "Clip Pop Medroa ${{ github.ref_name }}"
-          releaseBody: "Automated Tauri build for ${{ github.ref_name }}."
+          tagName: ${{ github.event.inputs.version || github.ref_name }}
+          releaseName: "Clip Pop Medroa ${{ github.event.inputs.version || github.ref_name }}"
+          releaseBody: "Automated Tauri build for ${{ github.event.inputs.version || github.ref_name }}."
           projectPath: .
+          args: ${{ matrix.os == 'macos-latest' && '--target universal-apple-darwin' || '' }}

@@ -171,7 +171,9 @@ fn load_locale(locale: String, app: AppHandle) -> Result<HashMap<String, String>
         }
 
         if let Ok(resource_dir) = app.path().resource_dir() {
-            let path = resource_dir.join("locales").join(format!("{candidate}.yaml"));
+            let path = resource_dir
+                .join("locales")
+                .join(format!("{candidate}.yaml"));
             if path.exists() {
                 return read_locale_from_path(path).map_err(|e| e.to_string());
             }
@@ -216,7 +218,9 @@ fn main() {
         .plugin(tauri_plugin_dialog::init())
         .manage(ClipboardState(Mutex::new(None)))
         .setup(|app| {
-            let window = app.get_webview_window("main").expect("failed to get main window");
+            let window = app
+                .get_webview_window("main")
+                .expect("failed to get main window");
 
             // Position window in bottom-right corner
             if let Some(monitor) = window.current_monitor()? {
