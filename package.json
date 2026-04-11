@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "tauri:dev": "cd src-tauri && cargo tauri dev",
-    "tauri:build": "cd src-tauri && cargo tauri build",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
     "fmt": "npm run fmt:rust && npm run fmt:frontend",
     "fmt:rust": "cd src-tauri && cargo fmt",
     "fmt:frontend": "prettier --write \"src/**/*.{js,html,css,json}\"",
@@ -19,6 +20,7 @@
     "@tauri-apps/plugin-dialog": "^2.6.0"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.10.1",
     "husky": "^9",
     "lint-staged": "^15",
     "prettier": "^3"
